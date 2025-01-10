@@ -1,0 +1,5 @@
+function limparCelulas() {
+  var planilha = SpreadsheetApp.getActiveSpreadsheet();
+  var aba = planilha.getActiveSheet();
+  aba.getRange("A2:E20").clearContent();
+}
