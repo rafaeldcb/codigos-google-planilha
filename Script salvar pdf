@@ -1,0 +1,32 @@
+function exportarTabelaEGraficoParaDownload() {
+  var planilha = SpreadsheetApp.getActiveSpreadsheet();
+  var aba = planilha.getActiveSheet();
+  var nomeArquivo = "Exportacao_Tabela_e_Grafico.pdf";
+
+  // URL base para exportar o arquivo como PDF
+  var url = planilha.getUrl();
+  var abaId = aba.getSheetId();
+  var pdfOptions = `export?format=pdf&size=A4&portrait=false&fitw=true&sheetnames=false&printtitle=false&pagenumbers=true&gridlines=false&fzr=false`;
+  var pdfUrl = `${url.replace(/edit$/, '')}${pdfOptions}&gid=${abaId}`;
+
+  // Autenticação
+  var token = ScriptApp.getOAuthToken();
+  var response = UrlFetchApp.fetch(pdfUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  // Gera o blob do PDF
+  var pdfBlob = response.getBlob();
+  pdfBlob.setName(nomeArquivo);
+
+  // Retorna o link para download
+  var ui = SpreadsheetApp.getUi();
+  var link = `data:application/pdf;base64,${Utilities.base64Encode(pdfBlob.getBytes())}`;
+  ui.alert(
+    "Clique no link abaixo para baixar o arquivo:\n\n" +
+    link +
+    "\n\n(Ou copie e cole no navegador caso necessário)"
+  );
+}
