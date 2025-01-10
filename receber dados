@@ -1,0 +1,21 @@
+function doGet(e) { 
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var params = e.parameter;
+
+
+  // Função para formatar os valores recebidos
+  function formatValue(value) {
+    return value ? value.toString().replace('.', ',') : "N/A";
+  }
+  
+  // Adiciona os dados na planilha com formatação corrigida
+  sheet.appendRow([
+    new Date(), // Timestamp
+    formatValue(params.periodo),
+    formatValue(params.frequencia),
+    formatValue(params.gravidade),
+    formatValue(params.velocidade)
+  ]);
+
+  return ContentService.createTextOutput("Dados adicionados com sucesso!");
+}
